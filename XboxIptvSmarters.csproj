@@ -11,6 +11,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <DisableXamlSourceGenerator>true</DisableXamlSourceGenerator>
+    <DisableXamlCompiler>true</DisableXamlCompiler>
   </PropertyGroup>
 
   <ItemGroup>

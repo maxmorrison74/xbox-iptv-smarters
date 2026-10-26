@@ -1,0 +1,97 @@
+<Page
+    x:Class="XboxIptvSmarters.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" 
+                    Background="{ThemeResource SystemBaseLowColor}" 
+                    Padding="20,15"
+                    Orientation="Horizontal">
+            <TextBlock Text="IPTV Smarters Xbox" 
+                       FontSize="28" 
+                       FontWeight="Bold"
+                       Foreground="{ThemeResource SystemBaseHighColor}"/>
+            <Border HorizontalAlignment="Right" CornerRadius="8" Padding="15,8" Background="{ThemeResource SystemAccentColor}">
+                <TextBlock x:Name="UserStatusText" 
+                           Text="Online" 
+                           FontSize="14"
+                           Foreground="White"
+                           VerticalAlignment="Center"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Navigation Menu -->
+            <StackPanel Grid.Column="0" 
+                        Background="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                        Padding="20"
+                        Spacing="12">
+                <Button x:Name="LiveButton" 
+                        Content="📺 CANALI LIVE" 
+                        FontSize="18"
+                        Height="70"
+                        Click="LiveButton_Click"
+                        HorizontalAlignment="Stretch"
+                        Background="{ThemeResource SystemAccentColor}"
+                        Foreground="White"/>
+                
+                <Button x:Name="VODButton" 
+                        Content="🎬 VOD / FILM" 
+                        FontSize="18"
+                        Height="70"
+                        Click="VODButton_Click"
+                        HorizontalAlignment="Stretch"
+                        Background="{ThemeResource SystemControlBackgroundChromeBrush}"
+                        Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                
+                <Button x:Name="SeriesButton" 
+                        Content="📡 SERIE TV" 
+                        FontSize="18"
+                        Height="70"
+                        Click="SeriesButton_Click"
+                        HorizontalAlignment="Stretch"
+                        Background="{ThemeResource SystemControlBackgroundChromeBrush}"
+                        Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                
+                <Button x:Name="SettingsButton" 
+                        Content="⚙ IMPOSTAZIONI" 
+                        FontSize="18"
+                        Height="70"
+                        Click="SettingsButton_Click"
+                        HorizontalAlignment="Stretch"
+                        Background="{ThemeResource SystemControlBackgroundChromeBrush}"
+                        Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                
+                <Border Height="1" Background="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" 
+                        Margin="0,10,0,10"/>
+                
+                <Button x:Name="LogoutButton" 
+                        Content="🚪 USCIRE" 
+                        FontSize="18"
+                        Height="70"
+                        Click="LogoutButton_Click"
+                        HorizontalAlignment="Stretch"
+                        Background="#FF4444"
+                        Foreground="White"/>
+            </StackPanel>
+
+            <!-- Content Frame -->
+            <Frame x:Name="ContentFrame" 
+                   Grid.Column="1" 
+                   Padding="40"/>
+        </Grid>
+    </Grid>
+</Page>

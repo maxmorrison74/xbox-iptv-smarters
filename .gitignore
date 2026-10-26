@@ -1,0 +1,66 @@
+# Built application files
+*.exe
+*.dll
+*.exe.ref
+*.dll.ref
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+*.msi
+
+# Files for the BRM (Build Release Manifest)
+*.pri
+
+# Obj and bin directories
+obj/
+bin/
+.vs/
+.vscode/
+
+# Visual Studio cache/options directory
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+
+# NuGet directories
+*.nupkg
+*.snupkg
+
+# NuGet packages folder
+packages/
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Files which should be excluded
+*.apk
+*.aab
+
+# macOS
+.DS_Store
+*.localized
+*.dSYM.zip
+*.dSYM
+
+# Node.js (se si usa qualche tool)
+node_modules/
+
+# Output della build
+output/

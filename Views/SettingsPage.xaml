@@ -1,0 +1,141 @@
+<Page
+    x:Class="XboxIptvSmarters.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Padding="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" 
+                   Text="⚙ IMPOSTAZIONI" 
+                   FontSize="40" 
+                   FontWeight="Bold"
+                   Margin="0,0,0,30"/>
+
+        <!-- Account Section -->
+        <Border Grid.Row="1" 
+                Background="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                Padding="30"
+                CornerRadius="12"
+                Margin="0,0,0,20">
+            <StackPanel Spacing="15">
+                <TextBlock Text="Account" 
+                           FontSize="28" 
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+                
+                <StackPanel Orientation="Horizontal" Spacing="15">
+                    <TextBlock Text="📡 Server:" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="ServerUrlText" 
+                               FontSize="18"
+                               TextWrapping="Wrap"
+                               MaxWidth="600"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" Spacing="15">
+                    <TextBlock Text="👤 Utente:" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="UsernameText" 
+                               FontSize="18"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" Spacing="15">
+                    <TextBlock Text="✓ Status:" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="StatusText" 
+                               FontSize="18"
+                               Foreground="{ThemeResource SystemAccentColor}"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" Spacing="15">
+                    <TextBlock Text="⏰ Scadenza:" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="ExpirationText" 
+                               FontSize="18"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+                
+                <StackPanel Margin="0,10,0,0">
+                    <CheckBox x:Name="RememberCheckBox" 
+                              Content="Ricorda le mie credenziali" 
+                              FontSize="18"
+                              Checked="RememberLoginCheckBox_Checked"
+                              Unchecked="RememberLoginCheckBox_Unchecked"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Actions Section -->
+        <Border Grid.Row="2" 
+                Background="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                Padding="30"
+                CornerRadius="12"
+                Margin="0,20,0,20">
+            <StackPanel Spacing="15">
+                <TextBlock Text="Azioni" 
+                           FontSize="28" 
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+                
+                <Button x:Name="ReauthenticateButton" 
+                        Content="🔄 Riconnetti con un altro account" 
+                        FontSize="18"
+                        Height="65"
+                        Click="ReauthenticateButton_Click"
+                        HorizontalAlignment="Stretch"
+                        Background="{ThemeResource SystemAccentColor}"
+                        Foreground="White"/>
+                
+                <Button x:Name="ClearDataButton" 
+                        Content="🗑 Cancella tutti i dati salvati" 
+                        FontSize="18"
+                        Height="65"
+                        Click="ClearDataButton_Click"
+                        HorizontalAlignment="Stretch"
+                        Background="#FFFFA500"
+                        Foreground="Black"/>
+                
+                <Button x:Name="ExitButton" 
+                        Content="🚪 Esci ed torna alla pagina del login" 
+                        FontSize="18"
+                        Height="65"
+                        Click="ExitButton_Click"
+                        HorizontalAlignment="Stretch"
+                        Background="#FF4444"
+                        Foreground="White"/>
+            </StackPanel>
+        </Border>
+
+        <!-- About Section -->
+        <Border Grid.Row="3" 
+                Background="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                Padding="30"
+                CornerRadius="12"
+                Margin="0,0,0,0">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Informazioni" 
+                           FontSize="28" 
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+                
+                <TextBlock Text="IPTV Smarters per Xbox" 
+                           FontSize="20"/>
+                <TextBlock Text="Versione 1.0.0"/>
+                <TextBlock Text="Supporta Xtream Codes API"/>
+                <TextBlock Text="Supporta canali Live, VOD e Serie TV"/>
+                <TextBlock Text="EPG integrato"/>
+                <TextBlock Text=""/>
+                <TextBlock Text="Construito per Xbox Dev Mode" 
+                           FontSize="14"
+                           Foreground="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

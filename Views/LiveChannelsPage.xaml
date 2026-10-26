@@ -1,0 +1,137 @@
+<Page
+    x:Class="XboxIptvSmarters.Views.LiveChannelsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" 
+                    Padding="20" 
+                    Orientation="Horizontal"
+                    Spacing="20">
+            <TextBlock Text="📺 Canali Live" 
+                       FontSize="32" 
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"/>
+            
+            <ProgressBar x:Name="LoadingProgress" 
+                         IsIndeterminate="True" 
+                         Width="200" 
+                         Height="4"
+                         Visibility="Visible"/>
+            
+            <TextBlock x:Name="StatusText" 
+                       Text="Caricamento..." 
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       Foreground="{ThemeResource SystemAccentColor}"/>
+        </StackPanel>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Categories Panel -->
+            <Border Grid.Column="0" 
+                    Background="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                    Padding="20"
+                    Margin="0,0,20,0">
+                <StackPanel>
+                    <TextBlock Text="Categorie" 
+                               FontSize="24" 
+                               FontWeight="Bold"
+                               Margin="0,0,0,15"/>
+                    
+                    <ListView x:Name="CategoriesList" 
+                              SelectionChanged="Category_SelectionChanged"
+                              Height="500"
+                              SelectionMode="Single">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Padding="10">
+                                    <TextBlock Text="{Binding CategoryName}" 
+                                               FontSize="16"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+
+            <!-- Channels List -->
+            <Border Grid.Column="1" 
+                    Background="{ThemeResource SystemControlBackgroundChromeBrush}" 
+                    Padding="20">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,0,0,15">
+                        <TextBlock Text="Elenco Canali" 
+                                   FontSize="24" 
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"/>
+                        <Button Content="EPG" 
+                                FontSize="14"
+                                Height="45"
+                                Padding="20,8"
+                                Click="LoadEPG_Click"/>
+                    </StackPanel>
+
+                    <ListView x:Name="ChannelsList" 
+                              Tapped="ChannelListItemView_Tapped"
+                              DoubleTapped="ChannelListItemView_DoubleTapped"
+                              IsTabStop="True"
+                              SelectionMode="Single">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Padding="12">
+                                    <Image x:Name="ChannelIcon" 
+                                           Source="{Binding StreamIcon}"
+                                           Width="80" 
+                                           Height="45"
+                                           Stretch="UniformToFill"
+                                           Margin="0,0,15,0"/>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" 
+                                                   FontSize="18"
+                                                   FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding CategoryId}" 
+                                                   FontSize="12"
+                                                   Foreground="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Status Footer -->
+        <Border Grid.Row="2" 
+                Background="{ThemeResource SystemControlBackgroundChromeBrush}" 
+                Padding="20"
+                BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" Spacing="15">
+                <TextBlock Text="💡 Doppio tap per riprodurre" 
+                           FontSize="14"
+                           Foreground="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+                <TextBlock Text="•" 
+                           FontSize="14"/>
+                <TextBlock Text="Seleziona categoria per filtrare" 
+                           FontSize="14"
+                           Foreground="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

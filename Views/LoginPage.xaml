@@ -1,0 +1,89 @@
+<Page
+    x:Class="XboxIptvSmarters.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Padding="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" 
+                   Text="IPTV Smarters Xbox" 
+                   FontSize="48" 
+                   FontWeight="Bold" 
+                   TextAlignment="Center" 
+                   Margin="0,0,0,20"/>
+
+        <TextBlock Grid.Row="0" 
+                   Text="IPTV Smarters per Xbox" 
+                   FontSize="48" 
+                   FontWeight="Bold" 
+                   TextAlignment="Center" 
+                   Margin="0,0,0,20"/>
+                   
+
+        <!-- Server URL -->
+        <StackPanel Grid.Row="1" Spacing="12" MinWidth="500">
+            <TextBlock Text="URL del Server" FontSize="16"/>
+            <TextBox x:Name="ServerUrlTextBox" 
+                     PlaceholderText="http://o https://server-iptv.com" 
+                     FontSize="18"
+                     Height="60"
+                     AutomationProperties.Name="Server URL"/>
+            
+            <!-- Username -->
+            <TextBlock Text="Username" FontSize="16" Margin="0,20,0,0"/>
+            <TextBox x:Name="UsernameTextBox" 
+                     PlaceholderText="Inserisci username" 
+                     FontSize="18"
+                     Height="60"
+                     AutomationProperties.Name="Username"/>
+            
+            <!-- Password -->
+            <TextBlock Text="Password" FontSize="16" Margin="0,20,0,0"/>
+            <PasswordBox x:Name="PasswordTextBox" 
+                         PlaceholderText="Inserisci password" 
+                         FontSize="18"
+                         Height="60"
+                         AutomationProperties.Name="Password"/>
+            
+            <!-- Remember me -->
+            <CheckBox x:Name="RememberCheckBox" 
+                      Content="Ricordami su questo dispositivo" 
+                      FontSize="16"
+                      IsChecked="True"
+                      Margin="0,20,0,0"/>
+            
+            <!-- Error message -->
+            <TextBlock x:Name="LoginStatus" 
+                       Text="" 
+                       FontSize="16"
+                       Foreground="Red"
+                       TextWrapping="Wrap"
+                       Margin="0,15,0,0"
+                       Visibility="Visible"/>
+            
+            <!-- Login button -->
+            <Button x:Name="LoginButton" 
+                    Content="ACCEDI" 
+                    FontSize="20"
+                    Height="70"
+                    MinWidth="300"
+                    Click="LoginButton_Click"
+                    Margin="0,30,0,0"
+                    HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Page>

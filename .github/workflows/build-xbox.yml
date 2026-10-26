@@ -1,8 +1,8 @@
-name: Build Xbox IPTV App
+name: Build Xbox IPTV App x64
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -10,10 +10,6 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    
-    strategy:
-      matrix:
-        platform: [x64, arm64]
     
     steps:
       - name: Checkout codice
@@ -24,26 +20,26 @@ jobs:
         with:
           dotnet-version: '8.0.x'
           
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
-        
+      - name: Setup WinSDK 10.0.19041
+        uses: microsoft/setup-windows-sdk@v0
+        with:
+          windows-sdk-version: '10.0.19041.0'
+          
       - name: Ripristina pacchetti NuGet
-        run: dotnet restore XboxIptvSmarters.csproj
-        
-      - name: Build Release
-        run: dotnet build XboxIptvSmarters.csproj --configuration Release --no-restore -p:Platform=${{ matrix.platform }}
-          
-      - name: Publish per Xbox
-        run: dotnet publish XboxIptvSmarters.csproj --configuration Release --no-restore -p:Platform=${{ matrix.platform }}
-          
-      - name: Crea directory output
         run: |
-          $platform = "${{ matrix.platform }}"
-          New-Item -ItemType Directory -Force -Path "output/${platform}" | Out-Null
+          dotnet restore XboxIptvSmarters.csproj
           
-      - name: Upload artefatti
+      - name: Build Release x64
+        run: |
+          dotnet build XboxIptvSmarters.csproj --configuration Release -p:Platform=x64
+          
+      - name: Publish x64
+        run: |
+          dotnet publish XboxIptvSmarters.csproj --configuration Release -p:Platform=x64 -o publish
+          
+      - name: Upload Release artefatti
         uses: actions/upload-artifact@v4
         with:
-          name: XboxIptvSmarters-${{ matrix.platform }}
-          path: bin/Release/net8.0-windows10.0.19041.0/${{ matrix.platform }}/publish/
+          name: XboxIptvSmarters-x64
+          path: publish/
           retention-days: 7

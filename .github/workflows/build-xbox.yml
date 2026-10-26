@@ -20,24 +20,16 @@ jobs:
         with:
           dotnet-version: '8.0.x'
           
-      - name: Setup WinSDK 10.0.19041
-        uses: microsoft/setup-windows-sdk@v0
-        with:
-          windows-sdk-version: '10.0.19041.0'
-          
-      - name: Ripristina pacchetti NuGet
-        run: |
-          dotnet restore XboxIptvSmarters.csproj
-          
+      - name: Restore NuGet
+        run: dotnet restore XboxIptvSmarters.csproj
+        
       - name: Build Release x64
-        run: |
-          dotnet build XboxIptvSmarters.csproj --configuration Release -p:Platform=x64
-          
+        run: dotnet build XboxIptvSmarters.csproj --configuration Release -p:Platform=x64
+        
       - name: Publish x64
-        run: |
-          dotnet publish XboxIptvSmarters.csproj --configuration Release -p:Platform=x64 -o publish
+        run: dotnet publish XboxIptvSmarters.csproj --configuration Release -p:Platform=x64 -o publish
           
-      - name: Upload Release artefatti
+      - name: Upload artefatti
         uses: actions/upload-artifact@v4
         with:
           name: XboxIptvSmarters-x64

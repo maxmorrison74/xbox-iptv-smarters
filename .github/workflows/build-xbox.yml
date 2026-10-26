@@ -28,51 +28,22 @@ jobs:
         uses: microsoft/setup-msbuild@v2
         
       - name: Ripristina pacchetti NuGet
-        run: |
-          dotnet restore XboxIptvSmarters.csproj
-          
+        run: dotnet restore XboxIptvSmarters.csproj
+        
       - name: Build Release
-        run: |
-          dotnet build XboxIptvSmarters.csproj --configuration Release --no-restore -p:Platform=${{ matrix.platform }}
+        run: dotnet build XboxIptvSmarters.csproj --configuration Release --no-restore -p:Platform=${{ matrix.platform }}
           
-      - name: Publish per Xbox (${{ matrix.platform }})
-        run: |
-          dotnet publish XboxIptvSmarters.csproj --configuration Release --no-restore -p:Platform=${{ matrix.platform }}
+      - name: Publish per Xbox
+        run: dotnet publish XboxIptvSmarters.csproj --configuration Release --no-restore -p:Platform=${{ matrix.platform }}
           
       - name: Crea directory output
         run: |
           $platform = "${{ matrix.platform }}"
-          $publishDir = "bin/Release/net8.0-windows10.0.19041.0/${platform}/publish"
           New-Item -ItemType Directory -Force -Path "output/${platform}" | Out-Null
-          Copy-Item -Path "${publishDir}/*" -Destination "output/${platform}/" -Recurse -Force
-          
-      - name: Crea file README
-        run: |
-          $content = @"
-# Xbox IPTV Smarters - ${{ matrix.platform }}
-
-## Installazione
-1. Copia tutti i file nella Xbox Dev Mode
-2. Usa il browser Xbox: http://XBOX-IP:11807/
-3. Oppure PowerShell: Add-AppxPackage -Path "\\XBOX-IP\path\to\file.appx"
-
-## Requisiti
-- Xbox Series X|S in Dev Mode
-- Credenziali Xtream Codes
-
-Build da GitHub Actions
-"@
-          Set-Content -Path "output/${{ matrix.platform }}\README.md" -Value $content
-          
-      - name: Crea file ZIP
-        run: |
-          Compress-Archive -Path "output/${{ matrix.platform }}\*" -DestinationPath "XboxIptvSmarters_${{ matrix.platform }}.zip" -Force
           
       - name: Upload artefatti
         uses: actions/upload-artifact@v4
         with:
           name: XboxIptvSmarters-${{ matrix.platform }}
-          path: |
-            XboxIptvSmarters_${{ matrix.platform }}.zip
-            output/${{ matrix.platform }}/README.md
-          retention-days: 30
+          path: bin/Release/net8.0-windows10.0.19041.0/${{ matrix.platform }}/publish/
+          retention-days: 7

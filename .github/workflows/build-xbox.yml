@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        platform: [x64, ARM64]
+        platform: [x64, arm64]
     
     steps:
       - name: Checkout codice
@@ -26,80 +26,43 @@ jobs:
           
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
-        with:
-          msbuild-architecture: ${{ matrix.platform == 'ARM64' && 'arm64' : 'x64' }}
-          
+        
       - name: Ripristina pacchetti NuGet
         run: |
           dotnet restore XboxIptvSmarters.csproj
           
-      - name: Build Debug
-        run: |
-          dotnet build XboxIptvSmarters.csproj --configuration Debug --no-restore
-          
       - name: Build Release
         run: |
-          dotnet build XboxIptvSmarters.csproj --configuration Release --no-restore
+          dotnet build XboxIptvSmarters.csproj --configuration Release --no-restore -p:Platform=${{ matrix.platform }}
           
       - name: Publish per Xbox (${{ matrix.platform }})
         run: |
-          dotnet publish XboxIptvSmarters.csproj --configuration Release --no-restore --self-contained false -f net8.0-windows10.0.19041.0 -p:Platform=${{ matrix.platform }}
+          dotnet publish XboxIptvSmarters.csproj --configuration Release --no-restore -p:Platform=${{ matrix.platform }}
           
-      - name: Copia file di installazione
+      - name: Crea directory output
         run: |
-          $publishDir = "bin/Release/net8.0-windows10.0.19041.0/${{ matrix.platform }}/publish"
-          $releaseDir = "bin/Release/net8.0-windows10.0.19041.0/${{ matrix.platform }}"
+          $platform = "${{ matrix.platform }}"
+          $publishDir = "bin/Release/net8.0-windows10.0.19041.0/${platform}/publish"
+          New-Item -ItemType Directory -Force -Path "output/${platform}" | Out-Null
+          Copy-Item -Path "${publishDir}/*" -Destination "output/${platform}/" -Recurse -Force
           
-          # Crea directory per output
-          New-Item -ItemType Directory -Force -Path "output/${{ matrix.platform }}" | Out-Null
-          
-          # Copia tutto ciò che è necessario per l'install
-          Get-ChildItem $publishDir -Recurse | Copy-Item -Destination "output/${{ matrix.platform }}" -Force
-          
-          # Copia anche i file .dll e .exe dalla directory di release
-          Get-ChildItem $releaseDir -File -Filter "*.dll" | Copy-Item -Destination "output/${{ matrix.platform }}" -Force
-          Get-ChildItem $releaseDir -File -Filter "*.exe" | Copy-Item -Destination "output/${{ matrix.platform }}" -Force
-          
-      - name: Crea file README output
+      - name: Crea file README
         run: |
           $content = @"
 # Xbox IPTV Smarters - ${{ matrix.platform }}
-          
-## Installazione su Xbox Dev Mode
 
-### Metodo 1: Via Browser Xbox
-1. Accedi alla console Xbox in modalità Dev Mode
-2. Apri il browser edge
-3. Vai su http://XBOX-IP:11807/ (sostituisci XBOX-IP con l'IP della tua console)
-4. Scarica tutti i file e crea un pacchetto .appx o .msix
-            
-### Metodo 2: Copia manuale
-1. Copia tutti i file della cartella "output/${{ matrix.platform }}" su una chiavetta
-2. Inserisci la chiavetta nella Xbox
-3. Usa l'app "App Installer" dalla Microsoft Store
-4. Selezione il file .appx o installi tutti i file
-
-### Metodo 3: PowerShell remoto
-1. Attiva PowerShell remoto sulla Xbox
-2. Dai il comando: Add-AppxPackage -Path "\\XBOX-IP\somewhere\XboxIptvSmarters.appx"
+## Installazione
+1. Copia tutti i file nella Xbox Dev Mode
+2. Usa il browser Xbox: http://XBOX-IP:11807/
+3. Oppure PowerShell: Add-AppxPackage -Path "\\XBOX-IP\path\to\file.appx"
 
 ## Requisiti
 - Xbox Series X|S in Dev Mode
-- Connessione internet per i primi download
-- Credenziali Xtream Codes API
+- Credenziali Xtream Codes
 
-## Supporto
-- ${{ matrix.platform }} ottimizzato per Xbox Series X|S
-- Supporta Live TV, VOD e Serie TV
-- EPG integrato
-
-Ver. 1.0.0 - Builds su github Actions
+Build da GitHub Actions
 "@
-          Set-Content -Path "output/${{ matrix.platform }}\INSTALL_README.md" -Value $content
-          
-      - name: Copia file del progetto originale
-        run: |
-          Copy-Item README.md "output/${{ matrix.platform }}/README_ORIGINALE.md" -Force
+          Set-Content -Path "output/${{ matrix.platform }}\README.md" -Value $content
           
       - name: Crea file ZIP
         run: |
@@ -111,67 +74,5 @@ Ver. 1.0.0 - Builds su github Actions
           name: XboxIptvSmarters-${{ matrix.platform }}
           path: |
             XboxIptvSmarters_${{ matrix.platform }}.zip
-            output/${{ matrix.platform }}/INSTALL_README.md
+            output/${{ matrix.platform }}/README.md
           retention-days: 30
-          
-  deploy:
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-          
-      - name: Download artefatti
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          
-      - name: Crea indice release
-        run: |
-          echo "### 🎮 Xbox IPTV Smarters - Release Automatica" > DRAFT_RELEASE.md
-          echo "" >> DRAFT_RELEASE.md
-          echo "**Build eseguita il:** $(date +"%Y-%m-%d %H:%M UTC")" >> DRAFT_RELEASE.md
-          echo "**Commit:** ${{ github.sha }}" >> DRAFT_RELEASE.md
-          echo "" >> DRAFT_RELEASE.md
-          echo "## 📦 Pacchetti disponibili:" >> DRAFT_RELEASE.md
-          echo "" >> DRAFT_RELEASE.md
-          echo "### Xbox Series X|S - x64" >> DRAFT_RELEASE.md
-          echo "- [Scarica XboxIptvSmarters_x64.zip](#artifacts)" >> DRAFT_RELEASE.md
-          echo "" >> DRAFT_RELEASE.md
-          echo "### Xbox Series X|S - ARM64" >> DRAFT_RELEASE.md
-          echo "- [Scarica XboxIptvSmarters_ARM64.zip](#artifacts)" >> DRAFT_RELEASE.md
-          echo "" >> DRAFT_RELEASE.md
-          echo "## 📖 Come installare:" >> DRAFT_RELEASE.md
-          echo "" >> DRAFT_RELEASE.md
-          echo "1. Estrai il file ZIP appropriato per il tuo dispositivo" >> DRAFT_RELEASE.md
-          echo "2. Carica i file sulla Xbox Dev Mode via browser (http://XBOX_IP:11807/)" >> DRAFT_RELEASE.md
-          echo "3. Oppure usa PowerShell remoto: Add-AppxPackage -Path 'percorso\\\\XboxIptvSmarters.appx'" >> DRAFT_RELEASE.md
-          echo "" >> DRAFT_RELEASE.md
-          echo "## 📱 Funzionalità" >> DRAFT_RELEASE.md
-          echo "- ✅ Canali LIVE con EPG" >> DRAFT_RELEASE.md
-          echo "- ✅ VOD (Film)" >> DRAFT_RELEASE.md
-          echo "- ✅ Serie TV con stagioni/episodi" >> DRAFT_RELEASE.md
-          echo "- ✅ Player video full screen" >> DRAFT_RELEASE.md
-          echo "- ✅ Credenziali salvate localmente" >> DRAFT_RELEASE.md
-          echo "" >> DRAFT_RELEASE.md
-          echo "## 🐛 Note" >> DRAFT_RELEASE.md
-          echo "- Assicurati che la Xbox sia in modalità Dev Mode" >> DRAFT_RELEASE.md
-          echo "- Usa crendziali Xtream Codes valide" >> DRAFT_RELEASE.md
-          echo "- Connessione internet necessaria" >> DRAFT_RELEASE.md
-          
-      - name: Crea draft release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v${{ github.run_number }}
-          name: Release v${{ github.run_number }}
-          body_path: DRAFT_RELEASE.md
-          draft: true
-          generate_release_notes: true
-          files: |
-            artifacts/XboxIptvSmarters-x64/XboxIptvSmarters_x64.zip
-            artifacts/XboxIptvSmarters-ARM64/XboxIptvSmarters_ARM64.zip
-        
-      - name: Notifica
-        run: echo "Release creata! Controlla https://github.com/${{ github.repository }}/releases per scaricare i pacchetti."

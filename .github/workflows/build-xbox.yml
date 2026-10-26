@@ -20,11 +20,7 @@ jobs:
         with:
           dotnet-version: '8.0.x'
           
-      - name: Install Windows APP SDK
-        run: |
-          dotnet nuget add source https://api.nuget.org/v3/index.json
-          
-      - name: Restore NuGet (pulito)
+      - name: Restore NuGet
         run: |
           dotnet restore XboxIptvSmarters.csproj /p:DisableXamlCompiler=true
           
